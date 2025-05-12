@@ -1,0 +1,8 @@
+*.o
+*.d
+btc
+RPN
+PmergeMe
+input.txt
+data.csv
+.vscode
