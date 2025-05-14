@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 18:36:39 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/05/14 14:38:12 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:06:31 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	main(int ac, char **av)
 	std::vector<int>	vecInput;
 	if (fillParseInput(ac, av, vecInput))
 		return (1);
-
 
 	// SORT WITH VECTOR AND GET TIME
 	std::clock_t vecStart = std::clock();
