@@ -6,11 +6,12 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:46:10 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/05/12 20:52:41 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/05/26 17:29:19 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#ifndef BITCOINEXCHANGE_HPP
+# define BITCOINEXCHANGE_HPP
 
 # include <ctime>
 # include <fstream>
@@ -75,3 +76,5 @@ void	parseInput(std::string input);
 // EXTRACT
 std::map<std::string, double>	extractData(std::string fileName);
 void							extract(std::map<std::string, double> &data, std::string file);
+
+#endif
