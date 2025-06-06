@@ -6,13 +6,14 @@
 #    By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/30 14:21:12 by agerbaud          #+#    #+#              #
-#    Updated: 2025/05/14 14:36:01 by agerbaud         ###   ########.fr        #
+#    Updated: 2025/05/27 11:45:53 by agerbaud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = PmergeMe
 
 SRCS =	sources/main.cpp		\
+		sources/Pair.cpp		\
 		sources/PmergeMe.cpp
 
 CXX = c++
