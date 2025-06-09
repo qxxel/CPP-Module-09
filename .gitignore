@@ -1,8 +1,8 @@
 *.o
 *.d
+*.txt
+*.csv
+*.vscode
 btc
 RPN
 PmergeMe
-input.txt
-data.csv
-.vscode
