@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:59:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/05/12 20:52:07 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:09:45 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ void	displayValue(std::map<std::string, double> data, std::string date, double v
 	{
 		it = data.lower_bound(date);
 		if (it == data.begin())
-			displayError("Error: Your input is out of date => " + date, false);
+		{
+			displayError("Error: bitcoin was not available at this date => " + date, false);
+			return ;
+		}
 		--it;
 	}
 
@@ -51,10 +54,11 @@ static bool	isValidDate(std::string line)
 	int	year = 0;
 	int	month = 0;
 	int	day = 0;
+	int	charsConsumed = 0;
 	int daysInMonth[] = {31,28,31,30,31,30,31,31,30,31,30,31};
 
 	std::size_t pos = line.find('|');
-	if (sscanf(line.substr(0,pos).c_str(), "%d-%d-%d", &year, &month, &day) != 3)
+	if (sscanf(line.substr(0,pos).c_str(), "%d-%d-%d %n", &year, &month, &day, &charsConsumed) != 3 || (int)line.substr(0,pos).length() > charsConsumed)
 		return (displayError("Error: wrong format => " + line, false));
 
 	if (year < 2000 || nowYear < year || month < 1 || 12 < month || day < 1 || 31 < day)
@@ -87,16 +91,17 @@ void	parseInput(std::string line, std::map<std::string, double> data)
 		std::size_t pos = line.find('|');
 		std::string date = line.substr(0, pos);
 		double		value = 0;
+		int			charsConsumed = 0;
 
-		if (sscanf(line.c_str(), "%*s | %lf", &value) != 1)
+		if (sscanf(line.c_str(), "%*s | %lf %n", &value, &charsConsumed) != 1 || (int)line.length() - (line[line.size() - 1] == '\n') > charsConsumed)
 			displayError("Error: wrong format => " + line, false);
 
 		else if (value < 0)
 			displayError("Error: not a positive number.", false);
-
+			
 		else if (1000 < value)
 			displayError("Error: too large a number.", false);
-		
+			
 		else
 			displayValue(data, date, value);
 	}
@@ -126,7 +131,7 @@ std::map<std::string, double>	extractData(std::string fileName)
 			char	buf[64];
 
 			if (sscanf(line.c_str(), "%63[^,],%lf", buf, &exRate) != 2)
-			throw SscanfFailed();
+				throw SscanfFailed();
 
 			date = buf;
 			data.insert(std::make_pair(date, exRate));
@@ -151,6 +156,8 @@ void	displayInput(std::string fileName, std::map<std::string, double> data)
 		while (std::getline(file, line))
 			parseInput(line, data);
 	}
+	else
+		displayError("Error: file is empty.", false);
 
 	file.close();
 }
