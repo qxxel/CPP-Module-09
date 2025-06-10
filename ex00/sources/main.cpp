@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 12:20:57 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/06/09 16:10:12 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:36:08 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ int	main(int ac, char **av)
 		return (displayError("Error: usage: ./btc [file.txt]", true));
 
 	std::string	file = av[1];
-	if (file.length() < 4 || file.compare(file.length() - 4, 4, ".txt"))
-		return (displayError("Error: usage: ./btc [file.txt]", true));
 
 	std::map<std::string, double>	data;
 	try

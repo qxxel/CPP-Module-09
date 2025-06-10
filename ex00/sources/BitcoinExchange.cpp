@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:59:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/06/09 16:09:45 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:39:26 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,12 @@ static bool	isValidDate(std::string line)
 
 void	parseInput(std::string line, std::map<std::string, double> data)
 {
+	if (line.empty())
+	{
+		displayError("Error: empty line.", false);
+		return ;
+	}
+
 	if (line.length() >= 10 && isValidDate(line))
 	{
 		std::size_t pos = line.find('|');
@@ -107,7 +113,7 @@ void	parseInput(std::string line, std::map<std::string, double> data)
 	}
 
 	if (line.length() < 10)
-			displayError("Error: wrong format => " + line, false);
+		displayError("Error: wrong format => " + line, false);
 }
 
 
@@ -153,6 +159,9 @@ void	displayInput(std::string fileName, std::map<std::string, double> data)
 
 	if (std::getline(file, line))
 	{
+		if (line != "date | value")
+			parseInput(line, data);
+
 		while (std::getline(file, line))
 			parseInput(line, data);
 	}
