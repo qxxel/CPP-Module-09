@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:46:10 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/05/26 17:29:19 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:46:12 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,7 @@ class	CantFindFile: public std::exception
 	public:
 		const char* what() const throw()
 		{
-			return ("can't find the file");
-		}
-};
-
-class	WrongLineInFile: public std::exception
-{
-	public:
-		const char* what() const throw()
-		{
-			return ("wrong line in the file");
+			return ("can't find the file.");
 		}
 };
 
@@ -61,7 +52,7 @@ class	SscanfFailed: public std::exception
 	public:
 		const char* what() const throw()
 		{
-			return ("sscanf failed during data extract, wrong format in " SRC_FILE);
+			return ("sscanf failed during data extract, wrong format in " SRC_FILE ".");
 		}
 };
 
