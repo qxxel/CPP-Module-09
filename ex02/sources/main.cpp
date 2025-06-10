@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:42:26 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/06/10 12:45:47 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:26:46 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,17 @@ int	main(int ac, char **av)
 	{
 		pmergeme = new PmergeMe(ac, av);
 		
+		// SORT WITH VECTOR AND GET TIME
 		std::clock_t vecStart = std::clock();
 		std::vector<int> vecResult = pmergeme->fordJohnsonSortVector();
 		std::clock_t vecEnd = std::clock();
 		double	vecDurationUs = 1000000.0 * (vecEnd - vecStart) / CLOCKS_PER_SEC;
-		
-		
-		// SORT WITH LIST AND GET TIME
-		std::clock_t listStart = std::clock();
-		std::list<int> listResult = pmergeme->fordJohnsonSortList();
-		std::clock_t listEnd = std::clock();
-		double	listDurationUs = 1000000.0 * (listEnd - listStart) / CLOCKS_PER_SEC;
+
+		// SORT WITH DEQUE AND GET TIME
+		std::clock_t dequeStart = std::clock();
+		std::deque<int> dequeResult = pmergeme->fordJohnsonSortDeque();
+		std::clock_t dequeEnd = std::clock();
+		double	dequeDurationUs = 1000000.0 * (dequeEnd - dequeStart) / CLOCKS_PER_SEC;
 
 
 		// SHOW RESULTS
@@ -60,12 +60,13 @@ int	main(int ac, char **av)
 		std::cout << std::endl;
 
 		std::cout << "Time to process a range of " << pmergeme->getVecInput().size() << " elements with std::vector : " << vecDurationUs << " us" << std::endl;
-		std::cout << "Time to process a range of " << pmergeme->getVecInput().size() << " elements with std::list : " << listDurationUs << " us" << std::endl;
+		std::cout << "Time to process a range of " << pmergeme->getVecInput().size() << " elements with std::deque : " << dequeDurationUs << " us" << std::endl;
 
 		delete pmergeme;
 	}
-	catch(const std::exception &)
+	catch(const std::exception &e)
 	{
+		std::cerr << "Error: " << e.what() << std::endl;
 		return (1);
 	}
 

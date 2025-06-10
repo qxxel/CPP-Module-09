@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:42:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/06/07 13:27:34 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:32:27 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // LIBRARIES INCLUDES
 # include <algorithm>
 # include <ctime>
+# include <deque>
 # include <errno.h>
 # include <exception>
 # include <iostream>
@@ -27,11 +28,11 @@
 # define RED	"\033[31m"
 # define RESET	"\033[0m"
 
-class PmergeMe
+class	PmergeMe
 {
 	private:
 		std::vector<int>	_vecInput;
-		std::list<int>		_listInput;
+		std::deque<int>		_dequeInput;
 
 
 		// PARSING
@@ -53,22 +54,17 @@ class PmergeMe
 		std::vector<int>	insertSortVec(std::vector<int> &vec);
 		std::vector<Pair*>	recursivityPairingSortVec(const std::vector<Pair*> &previousVec);
 
-		// FORD-JOHNSON LIST
-		std::list<Pair*>::const_iterator	getElementList(std::list<Pair*> list, size_t index);
-		std::list<int>::const_iterator		getElementList(std::list<int> list, size_t index);
-		void								insertAtIndexList(std::list<Pair*> &list, Pair *pair, size_t index);
-		void								insertAtIndexList(std::list<int> &list, int integer, size_t index);
-		void								freePairsList(std::list<Pair*> &list);
-		std::list<Pair*>					makePairsList(const std::list<Pair*> &list);
-		std::list<Pair*>					makePairsList(const std::list<int> &list);
-		std::list<Pair*>					unpairToPairList(std::list<Pair*> pairs);
-		std::list<int>						unpairToIntList(std::list<Pair*> pairs);
-		size_t								findIndexList(std::list<Pair*> list, int insert, int min, int max);
-		size_t								findIndexList(std::list<int> list, int insert, int min, int max);
-		std::list<Pair*>					insertSortList(std::list<Pair*> &list);
-		std::list<int>						insertSortList(std::list<int> &list);
-		std::list<Pair*>					recursivityPairingSortList(const std::list<Pair*> &previousList);
-
+		// FORD-JOHNSON DEQUE
+		void				freePairsDeque(std::deque<Pair*> &vec);
+		std::deque<Pair*>	makePairsDeque(const std::deque<Pair*> &vec);
+		std::deque<Pair*>	makePairsDeque(const std::deque<int> &vec);
+		std::deque<Pair*>	unpairToPairDeque(std::deque<Pair*> pairs);
+		std::deque<int>		unpairToIntDeque(std::deque<Pair*> pairs);
+		size_t				findIndexDeque(std::deque<Pair*> vec, int insert, int min, int max);
+		size_t				findIndexDeque(std::deque<int> vec, int insert, int min, int max);
+		std::deque<Pair*>	insertSortDeque(std::deque<Pair*> &vec);
+		std::deque<int>		insertSortDeque(std::deque<int> &vec);
+		std::deque<Pair*>	recursivityPairingSortDeque(const std::deque<Pair*> &previousVec);
 
 	public:
 		// CONSTRUCTOR AND DESTRUCTOR
@@ -80,7 +76,7 @@ class PmergeMe
 
 		// PUBLIC MEMBER FUNCTIONS
 		std::vector<int>	fordJohnsonSortVector();
-		std::list<int>		fordJohnsonSortList();
+		std::deque<int>		fordJohnsonSortDeque();
 };
 
 #endif

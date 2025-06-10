@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:42:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/06/10 12:45:16 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:32:23 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ PmergeMe::PmergeMe(int ac, char **av)
 	if (fillParseInput(ac, av, this->_vecInput))
 		throw std::exception();
 
-	// CREATE LIST WITH VECTOR
+	// CREATE DEQUE WITH VECTOR
 	for (std::vector<int>::iterator it = this->_vecInput.begin(); it != this->_vecInput.end(); ++it)
-		this->_listInput.push_back(*it);
+		this->_dequeInput.push_back(*it);
 }
 
 PmergeMe::~PmergeMe() { }
@@ -74,7 +74,7 @@ bool	PmergeMe::fillParseInput(int ac, char **av, std::vector<int> &vecInput)
 		if (errno == ERANGE || val < 0 || 2147483647 < val)
 		{
 			std::cerr << "Error : \"" << av[i] << "\" isn't a valid positive integer." << std::endl;
-	    	return (true);
+			return (true);
 		}
 
 		vecInput.push_back(static_cast<int>(val));
@@ -320,322 +320,286 @@ std::vector<Pair*>	PmergeMe::recursivityPairingSortVec(const std::vector<Pair*> 
 
 std::vector<int>	PmergeMe::fordJohnsonSortVector()
 {
-    if (this->_vecInput.size() == 1)
-        return (this->_vecInput);
+	if (this->_vecInput.size() == 1)
+		return (this->_vecInput);
 
-    std::vector<Pair*>    pairs = makePairsVec(this->_vecInput);
+	std::vector<Pair*>    pairs = makePairsVec(this->_vecInput);
 
-    if (pairs.size() == 1)
-    {
-        std::vector<int>    preSortedInt;
-
-        preSortedInt.push_back(pairs[0]->getIntMin());
-        preSortedInt.push_back(pairs[0]->getIntMax());
-        if (this->_vecInput.size() == 3)
-            preSortedInt.push_back(this->_vecInput[2]);
-        
-        std::vector<int>    finalVec = insertSortVec(preSortedInt);
-
-        freePairsVec(pairs);
-
-        return (finalVec);
-    }
-
-    std::vector<Pair*>    sortedPairsOfPairs = recursivityPairingSortVec(pairs);
-    std::vector<Pair*>    sortedPairs = insertSortVec(sortedPairsOfPairs);
-    std::vector<int>    preSortedInt = unpairToIntVec(sortedPairs);
-
-    if (this->_vecInput.size() % 2 != 0)
-        preSortedInt.push_back(this->_vecInput[this->_vecInput.size() - 1]);
-
-    std::vector<int>    finalVec = insertSortVec(preSortedInt);
-    
-    freePairsVec(pairs);
-    freePairsVec(sortedPairsOfPairs);
-    freePairsVec(sortedPairs);
-
-    return (finalVec);
-}
-
-
-/* ======================================== FORD-JOHNSON LIST ======================================== */
-
-
-std::list<Pair*>::const_iterator	PmergeMe::getElementList(std::list<Pair*> list, size_t index)
-{
-	if (index >= list.size())
+	if (pairs.size() == 1)
 	{
-		std::list<Pair*>::const_iterator it = list.end();
-		return (it);
+		std::vector<int>    preSortedInt;
+
+		preSortedInt.push_back(pairs[0]->getIntMin());
+		preSortedInt.push_back(pairs[0]->getIntMax());
+		if (this->_vecInput.size() == 3)
+			preSortedInt.push_back(this->_vecInput[2]);
+		
+		std::vector<int>    finalVec = insertSortVec(preSortedInt);
+
+		freePairsVec(pairs);
+
+		return (finalVec);
 	}
 
-	std::list<Pair*>::const_iterator it = list.begin();
-	std::advance(it, index);
+	std::vector<Pair*>    sortedPairsOfPairs = recursivityPairingSortVec(pairs);
+	std::vector<Pair*>    sortedPairs = insertSortVec(sortedPairsOfPairs);
+	std::vector<int>    preSortedInt = unpairToIntVec(sortedPairs);
 
-	return (it);
+	if (this->_vecInput.size() % 2 != 0)
+		preSortedInt.push_back(this->_vecInput[this->_vecInput.size() - 1]);
+
+	std::vector<int>    finalVec = insertSortVec(preSortedInt);
+	
+	freePairsVec(pairs);
+	freePairsVec(sortedPairsOfPairs);
+	freePairsVec(sortedPairs);
+
+	return (finalVec);
 }
 
-std::list<int>::const_iterator	PmergeMe::getElementList(std::list<int> list, size_t index)
+
+/* ======================================== FORD-JOHNSON DEQUE ======================================== */
+
+
+void	PmergeMe::freePairsDeque(std::deque<Pair*> &deque)
 {
-	if (index >= list.size())
+	for (size_t i = 0; i < deque.size(); ++i)
+		delete deque[i];
+
+	deque.clear();
+}
+
+std::deque<Pair*>	PmergeMe::makePairsDeque(const std::deque<Pair*> &deque)
+{
+	std::deque<Pair*>	pairs;
+	size_t				dequeSize = deque.size();
+	
+	for (size_t i = 0; i + 1 < dequeSize; i += 2)
 	{
-		std::list<int>::const_iterator it = list.end();
-		return (it);
-	}
-
-	std::list<int>::const_iterator it = list.begin();
-	std::advance(it, index);
-
-	return (it);
-}
-
-void	PmergeMe::insertAtIndexList(std::list<Pair*> &list, Pair *pair, size_t index)
-{
-	std::list<Pair*>::iterator it = list.begin();
-	std::advance(it, index);
-
-	list.insert(it, pair);
-}
-
-void	PmergeMe::insertAtIndexList(std::list<int> &list, int integer, size_t index)
-{
-	std::list<int>::iterator it = list.begin();
-	std::advance(it, index);
-
-	list.insert(it, integer);
-}
-
-void	PmergeMe::freePairsList(std::list<Pair*> &list)
-{
-	for (std::list<Pair*>::iterator it = list.begin(); it != list.end(); ++it)
-		delete *it;
-
-	list.clear();
-}
-
-std::list<Pair*>	PmergeMe::makePairsList(const std::list<Pair*> &list)
-{
-	std::list<Pair*>					pairs;
-	std::list<Pair*>::const_iterator	it1 = list.begin();
-	std::list<Pair*>::const_iterator	it2 = list.begin();
-
-	++it2;
-	while (it1 != list.end() && it2 != list.end())
-	{
-		Pair *tmp = new Pair(*it1, *it2);
+		Pair *tmp = new Pair(deque[i], deque[i + 1]);
 		pairs.push_back(tmp);
-		++it1;
-		++it1;
-		++it2;
-		++it2;
 	}
 
 	return (pairs);
 }
 
-std::list<Pair*>	PmergeMe::makePairsList(const std::list<int> &list)
+std::deque<Pair*>	PmergeMe::makePairsDeque(const std::deque<int> &deque)
 {
-	std::list<Pair*>					pairs;
-	std::list<int>::const_iterator	it1 = list.begin();
-	std::list<int>::const_iterator	it2 = list.begin();
-
-	++it2;
-	while (it2 != list.end())
+	std::deque<Pair*>	pairs;
+	size_t				dequeSize = deque.size();
+	
+	for (size_t i = 0; i + 1 < dequeSize; i += 2)
 	{
-		Pair *tmp = new Pair(*it1, *it2);
+		Pair *tmp = new Pair(deque[i], deque[i + 1]);
 		pairs.push_back(tmp);
-		++it1;
-		++it1;
-		++it2;
-		++it2;
 	}
 
 	return (pairs);
 }
 
-std::list<int>	PmergeMe::unpairToIntList(std::list<Pair*> pairs)
+std::deque<int>	PmergeMe::unpairToIntDeque(std::deque<Pair*> pairs)
 {
-	std::list<int>	list;
+	std::deque<int>	deque;
 
-	for (std::list<Pair*>::iterator it = pairs.begin(); it != pairs.end(); ++it)
+	for (size_t i = 0; i < pairs.size(); ++i)
 	{
-		list.push_back((*it)->getIntMin());
-		list.push_back((*it)->getIntMax());
+		deque.push_back(pairs[i]->getIntMin());
+		deque.push_back(pairs[i]->getIntMax());
 	}
 
-	return (list);
+	return (deque);
 }
 
-std::list<Pair*>	PmergeMe::unpairToPairList(std::list<Pair*> pairs)
+std::deque<Pair*>	PmergeMe::unpairToPairDeque(std::deque<Pair*> pairs)
 {
-	std::list<Pair*>	list;
+	std::deque<Pair*>	deque;
 
-	for (std::list<Pair*>::iterator it = pairs.begin(); it != pairs.end(); ++it)
+	for (size_t i = 0; i < pairs.size(); ++i)
 	{
-		list.push_back((*it)->getPairMin()->deepCopy());
-		list.push_back((*it)->getPairMax()->deepCopy());
+		deque.push_back(pairs[i]->getPairMin()->deepCopy());
+		deque.push_back(pairs[i]->getPairMax()->deepCopy());
 	}
 
-	return (list);
+	return (deque);
 }
 
-size_t	PmergeMe::findIndexList(std::list<Pair*> list, int insert, int min, int max)
+size_t	PmergeMe::findIndexDeque(std::deque<Pair*> deque, int insert, int min, int max)
 {
 	int	actualIndex = 0;
-	
-	while (insert != (*getElementList(list, actualIndex))->getIntMax() && min < max)
+
+	while (insert != deque[actualIndex]->getIntMax() && min < max)
 	{
 		actualIndex = (min + max) / 2;
-		
-		if (insert > (*getElementList(list, actualIndex))->getIntMax())
+
+		if (insert > deque[actualIndex]->getIntMax())
 			min = actualIndex + 1;
 		else
 			max = actualIndex;
 	}
 
 	if (min >= max)
-	return (min);
+		return (min);
 
 	return (actualIndex);
 }
 
-size_t	PmergeMe::findIndexList(std::list<int> list, int insert, int min, int max)
+size_t	PmergeMe::findIndexDeque(std::deque<int> deque, int insert, int min, int max)
 {
 	int	actualIndex = 0;
 
-	while (insert != (*getElementList(list, actualIndex)) && min < max)
+	while (insert != deque[actualIndex] && min < max)
 	{
 		actualIndex = (min + max) / 2;
-		
-		if (insert > (*getElementList(list, actualIndex)))
+
+		if (insert > deque[actualIndex])
 			min = actualIndex + 1;
 		else
 			max = actualIndex;
 	}
 
 	if (min >= max)
-	return (min);
+		return (min);
 
 	return (actualIndex);
 }
 
-std::list<Pair*>	PmergeMe::insertSortList(std::list<Pair*> &list)
+std::deque<Pair*>	PmergeMe::insertSortDeque(std::deque<Pair*> &deque)
 {
-	std::list<Pair*>	listSorted;
+	std::deque<Pair*>	dequeSorted;
 	int					index = 0;
-	
-	listSorted.push_back((*getElementList(list, 0))->deepCopy());
-	listSorted.push_back((*getElementList(list, 1))->deepCopy());
-	
-	for (int k = 2; listSorted.size() < list.size(); ++k)
+
+	dequeSorted.push_back(deque[0]->deepCopy());
+	dequeSorted.push_back(deque[1]->deepCopy());
+
+	for (int k = 2; dequeSorted.size() < deque.size(); ++k)
 	{
 		unsigned long	t = jacobsthal(k);
 		unsigned long	tPrev = jacobsthal(k - 1);
-		if (t > list.size() - 1)
-		t = list.size() - 1;
+		if (t > deque.size() - 1)
+			t = deque.size() - 1;
 		while (t > tPrev)
 		{
 			int	max = 1 << k;
-			if ((size_t)max >= listSorted.size())
-			max = listSorted.size();
-			
-			index = findIndexList(listSorted, (*getElementList(list, t))->getIntMax(), 0, max);
-			insertAtIndexList(listSorted, (*getElementList(list, t))->deepCopy(), index);
-			
+			if ((size_t)max >= dequeSorted.size())
+				max = dequeSorted.size();
+
+			index = findIndexDeque(dequeSorted, deque[t]->getIntMax(), 0, max);
+			dequeSorted.insert(dequeSorted.begin() + index, deque[t]->deepCopy());
+
 			--t;
 		}
 	}
-	
-	return (listSorted);
+
+	return (dequeSorted);
 }
 
-std::list<int>		PmergeMe::insertSortList(std::list<int> &list)
+std::deque<int>	PmergeMe::insertSortDeque(std::deque<int> &deque)
 {
-	std::list<int>		listSorted;
+	std::deque<int>	dequeSorted;
 	int					index = 0;
-	
-	listSorted.push_back((*getElementList(list, 0)));
-	listSorted.push_back((*getElementList(list, 1)));
-	
-	for (int k = 2; listSorted.size() < list.size(); ++k)
+
+	dequeSorted.push_back(deque[0]);
+	dequeSorted.push_back(deque[1]);
+
+	for (int k = 2; dequeSorted.size() < deque.size(); ++k)
 	{
 		unsigned long	t = jacobsthal(k);
 		unsigned long	tPrev = jacobsthal(k - 1);
-		if (t > list.size() - 1)
-		t = list.size() - 1;
+		if (t > deque.size() - 1)
+			t = deque.size() - 1;
+		
 		while (t > tPrev)
 		{
 			int	max = 1 << k;
-			if ((size_t)max >= listSorted.size())
-			max = listSorted.size();
-			
-			index = findIndexList(listSorted, (*getElementList(list, t)), 0, max);
-			insertAtIndexList(listSorted, (*getElementList(list, t)), index);
-			
+			if ((size_t)max >= dequeSorted.size())
+				max = dequeSorted.size();
+
+			index = findIndexDeque(dequeSorted, deque[t], 0, max);
+			dequeSorted.insert(dequeSorted.begin() + index, deque[t]);
+
 			--t;
 		}
 	}
-	
-	return (listSorted);
+
+	return (dequeSorted);
 }
 
-std::list<Pair*>	PmergeMe::recursivityPairingSortList(const std::list<Pair*> &previousList)
+std::deque<Pair*>	PmergeMe::recursivityPairingSortDeque(const std::deque<Pair*> &previousdeque)
 {
-	std::list<Pair*>	listPaired = makePairsList(previousList);
+	std::deque<Pair*>	dequePaired = makePairsDeque(previousdeque);
 
-	if (listPaired.size() == 1)
+	if (dequePaired.size() == 1)
 	{
-		std::list<Pair*>	finalPairs;
+		std::deque<Pair*>	finalPairs;
 
-		finalPairs.push_back((*getElementList(listPaired, 0))->getPairMin()->deepCopy());
-		finalPairs.push_back((*getElementList(listPaired, 0))->getPairMax()->deepCopy());
-		if (previousList.size() == 3)
-			finalPairs.push_back((*getElementList(previousList, 2)));
-
-		freePairsList(listPaired);
+		finalPairs.push_back(dequePaired[0]->getPairMin()->deepCopy());
+		finalPairs.push_back(dequePaired[0]->getPairMax()->deepCopy());
+		if (previousdeque.size() == 3)
+			finalPairs.push_back(previousdeque[2]);
+		
+		freePairsDeque(dequePaired);
 
 		return (finalPairs);
 	}
 
-	std::list<Pair*>	listPairedSorted = recursivityPairingSortList(listPaired);
-	std::list<Pair*>	list = unpairToPairList(listPairedSorted);
+	std::deque<Pair*>	dequePairedSorted = recursivityPairingSortDeque(dequePaired);
+	std::deque<Pair*>	deque = unpairToPairDeque(dequePairedSorted);
 
-	if (previousList.size() % 2 != 0)
-		list.push_back((*getElementList(previousList, previousList.size() - 1))->deepCopy());
+	if (previousdeque.size() % 2 != 0)
+		deque.push_back(previousdeque[previousdeque.size() - 1]->deepCopy());
 
-	std::list<Pair*>	finalList = insertSortList(list);
+	std::deque<Pair*>	finaldeque = insertSortDeque(deque);
 
-	freePairsList(listPaired);
-	if (listPairedSorted.size() == 2 || listPairedSorted.size() == 3)
+	freePairsDeque(dequePaired);
+	if (dequePairedSorted.size() == 2 || dequePairedSorted.size() == 3)
 	{
-		for (size_t i = 0; i < listPairedSorted.size() - (listPairedSorted.size() == 3); ++i)
-			delete *getElementList(listPairedSorted, i);
+		for (size_t i = 0; i < dequePairedSorted.size() - (dequePairedSorted.size() == 3); ++i)
+			delete dequePairedSorted[i];
 
-		listPairedSorted.clear();
+		dequePairedSorted.clear();
 	}
 	else
-		freePairsList(listPairedSorted);
-	freePairsList(list);
+		freePairsDeque(dequePairedSorted);
+	freePairsDeque(deque);
 
-	return (finalList);
+	return (finaldeque);
 }
 
-std::list<int>		PmergeMe::fordJohnsonSortList()
+std::deque<int>	PmergeMe::fordJohnsonSortDeque()
 {
-	std::list<Pair*>	pairs = makePairsList(this->_listInput);
+	if (this->_dequeInput.size() == 1)
+		return (this->_dequeInput);
+
+	std::deque<Pair*>    pairs = makePairsDeque(this->_dequeInput);
+
+	if (pairs.size() == 1)
+	{
+		std::deque<int>    preSortedInt;
+
+		preSortedInt.push_back(pairs[0]->getIntMin());
+		preSortedInt.push_back(pairs[0]->getIntMax());
+		if (this->_dequeInput.size() == 3)
+			preSortedInt.push_back(this->_dequeInput[2]);
+		
+		std::deque<int>	finaldeque = insertSortDeque(preSortedInt);
+
+		freePairsDeque(pairs);
+
+		return (finaldeque);
+	}
+
+	std::deque<Pair*>    sortedPairsOfPairs = recursivityPairingSortDeque(pairs);
+	std::deque<Pair*>    sortedPairs = insertSortDeque(sortedPairsOfPairs);
+	std::deque<int>    preSortedInt = unpairToIntDeque(sortedPairs);
+
+	if (this->_dequeInput.size() % 2 != 0)
+		preSortedInt.push_back(this->_dequeInput[this->_dequeInput.size() - 1]);
+
+	std::deque<int>    finaldeque = insertSortDeque(preSortedInt);
 	
-	std::list<Pair*>	sortedPairsOfPairs = recursivityPairingSortList(pairs);
-	std::list<Pair*>	sortedPairs = insertSortList(sortedPairsOfPairs);
-	std::list<int>	preSortedInt = unpairToIntList(sortedPairs);
-	
-	if (this->_vecInput.size() % 2 != 0)
-	preSortedInt.push_back(this->_vecInput[this->_vecInput.size() - 1]);
-	
-	std::list<int>	finalVec = insertSortList(preSortedInt);
-	
-	freePairsList(pairs);
-	freePairsList(sortedPairsOfPairs);
-	freePairsList(sortedPairs);
-	
-	return (finalVec);
+	freePairsDeque(pairs);
+	freePairsDeque(sortedPairsOfPairs);
+	freePairsDeque(sortedPairs);
+
+	return (finaldeque);
 }
