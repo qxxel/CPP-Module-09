@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:42:20 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/06/07 14:37:43 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:45:16 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -320,22 +320,41 @@ std::vector<Pair*>	PmergeMe::recursivityPairingSortVec(const std::vector<Pair*> 
 
 std::vector<int>	PmergeMe::fordJohnsonSortVector()
 {
-	std::vector<Pair*>	pairs = makePairsVec(this->_vecInput);
+    if (this->_vecInput.size() == 1)
+        return (this->_vecInput);
 
-	std::vector<Pair*>	sortedPairsOfPairs = recursivityPairingSortVec(pairs);
-	std::vector<Pair*>	sortedPairs = insertSortVec(sortedPairsOfPairs);
-	std::vector<int>	preSortedInt = unpairToIntVec(sortedPairs);
+    std::vector<Pair*>    pairs = makePairsVec(this->_vecInput);
 
-	if (this->_vecInput.size() % 2 != 0)
-		preSortedInt.push_back(this->_vecInput[this->_vecInput.size() - 1]);
+    if (pairs.size() == 1)
+    {
+        std::vector<int>    preSortedInt;
 
-	std::vector<int>	finalVec = insertSortVec(preSortedInt);
-	
-	freePairsVec(pairs);
-	freePairsVec(sortedPairsOfPairs);
-	freePairsVec(sortedPairs);
+        preSortedInt.push_back(pairs[0]->getIntMin());
+        preSortedInt.push_back(pairs[0]->getIntMax());
+        if (this->_vecInput.size() == 3)
+            preSortedInt.push_back(this->_vecInput[2]);
+        
+        std::vector<int>    finalVec = insertSortVec(preSortedInt);
 
-	return (finalVec);
+        freePairsVec(pairs);
+
+        return (finalVec);
+    }
+
+    std::vector<Pair*>    sortedPairsOfPairs = recursivityPairingSortVec(pairs);
+    std::vector<Pair*>    sortedPairs = insertSortVec(sortedPairsOfPairs);
+    std::vector<int>    preSortedInt = unpairToIntVec(sortedPairs);
+
+    if (this->_vecInput.size() % 2 != 0)
+        preSortedInt.push_back(this->_vecInput[this->_vecInput.size() - 1]);
+
+    std::vector<int>    finalVec = insertSortVec(preSortedInt);
+    
+    freePairsVec(pairs);
+    freePairsVec(sortedPairsOfPairs);
+    freePairsVec(sortedPairs);
+
+    return (finalVec);
 }
 
 
