@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:17:01 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/06/06 17:30:10 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:03:48 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,18 @@ Pair::Pair(Pair *first, Pair *second): _intMin(-1)
 	}
 }
 
-Pair::~Pair() { }
-
-
-Pair*	Pair::deepCopy() const
+Pair::Pair(const Pair &src)
 {
-	return new Pair(*this);
+	if (&src != this)
+	{
+		this->_intMax = src._intMax;
+		this->_intMin = src._intMin;
+		this->_pairMax = src._pairMax;
+		this->_pairMin = src._pairMin;
+	}
 }
+
+Pair::~Pair() { }
 
 
 int	Pair::getIntMax() const
@@ -72,9 +77,7 @@ Pair	*Pair::getPairMin() const
 }
 
 
-// int	Pair::maxIntPair(Pair *pair) const
-// {
-// 	if (pair->_intMax > 0)
-// 		return (pair->_intMax);
-// 	return (this->maxIntPair(pair->getPairMax()));
-// }
+Pair*	Pair::deepCopy() const
+{
+	return new Pair(*this);
+}

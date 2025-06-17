@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:07:17 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/06/05 23:30:46 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:01:15 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,28 @@ class Pair
 	private:
 		int		_intMax;
 		int		_intMin;
-		// Pair	_pairMax;
-		// Pair	_pairMin;
 		Pair	*_pairMax;
 		Pair	*_pairMin;
 
-	public:
+
+		// CANONICAL FORM
+		Pair(const Pair &src);
+		Pair	&operator=(const Pair &src);
+		
+		public:
+		// CONSTRUCTORS AND DESTRUCTOR
 		Pair(int first, int second);
 		Pair(Pair *first, Pair *second);
 		~Pair();
-
-		Pair	*deepCopy() const;
-
+		
+		// GETTERS
 		int		getIntMax() const;
 		int		getIntMin() const;
 		Pair	*getPairMax() const;
 		Pair	*getPairMin() const;
-
-		// int	maxIntPair(Pair *pair) const;
+		
+		// DEEP COPY
+		Pair	*deepCopy() const;
 };
 
 #endif

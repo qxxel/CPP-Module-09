@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:42:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/06/10 15:32:27 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:59:54 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,17 @@ class	PmergeMe
 		std::deque<int>		_dequeInput;
 
 
+		// CANONICAL FORM
+		PmergeMe(const PmergeMe &src);
+		PmergeMe	&operator=(const PmergeMe &src);
+
 		// PARSING
 		bool				isPositiveInteger(char *str);
 		bool				fillParseInput(int ac, char **av, std::vector<int> &vecInput);
 
 		// JACOBSTHAL
 		unsigned long		jacobsthal(unsigned int k);
-
+		
 		// FORD-JOHNSON VECTOR
 		void				freePairsVec(std::vector<Pair*> &vec);
 		std::vector<Pair*>	makePairsVec(const std::vector<Pair*> &vec);
@@ -53,7 +57,7 @@ class	PmergeMe
 		std::vector<Pair*>	insertSortVec(std::vector<Pair*> &vec);
 		std::vector<int>	insertSortVec(std::vector<int> &vec);
 		std::vector<Pair*>	recursivityPairingSortVec(const std::vector<Pair*> &previousVec);
-
+		
 		// FORD-JOHNSON DEQUE
 		void				freePairsDeque(std::deque<Pair*> &vec);
 		std::deque<Pair*>	makePairsDeque(const std::deque<Pair*> &vec);
@@ -65,12 +69,12 @@ class	PmergeMe
 		std::deque<Pair*>	insertSortDeque(std::deque<Pair*> &vec);
 		std::deque<int>		insertSortDeque(std::deque<int> &vec);
 		std::deque<Pair*>	recursivityPairingSortDeque(const std::deque<Pair*> &previousVec);
-
-	public:
+		
+		public:
 		// CONSTRUCTOR AND DESTRUCTOR
 		PmergeMe(int ac, char **av);
 		~PmergeMe();
-
+		
 		// GETTER
 		std::vector<int>	getVecInput() const;
 
