@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:59:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/06/17 14:25:46 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:50:04 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static bool	isValidDate(std::string line)
 			return (displayError("Error: bad input => " + line.substr(0, pos), false));
 	}
 
-	if (day > daysInMonth[month - 1])
+	else if (day > daysInMonth[month - 1])
 		return (displayError("Error: bad input => " + line.substr(0, pos), false));
 	
 	return (true);
