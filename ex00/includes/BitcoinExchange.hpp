@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:46:10 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/06/10 16:46:12 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:25:36 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,15 @@ struct Input {
 	std::string	date;
 	std::string	error;
 	double		value;
+};
+
+class	CantFindData: public std::exception
+{
+	public:
+		const char* what() const throw()
+		{
+			return ("can't find the data file.");
+		}
 };
 
 class	CantFindFile: public std::exception

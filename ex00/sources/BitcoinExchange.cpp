@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:59:15 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/06/10 15:39:26 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:25:46 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ std::map<std::string, double>	extractData(std::string fileName)
 	std::ifstream	file(fileName.c_str());
 
 	if (!file)
-		throw CantFindFile();
+		throw CantFindData();
 
 	std::map<std::string, double>	data;
 	std::string						line;
