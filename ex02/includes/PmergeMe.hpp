@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:42:08 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/06/17 16:59:54 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:00:21 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,18 +59,18 @@ class	PmergeMe
 		std::vector<Pair*>	recursivityPairingSortVec(const std::vector<Pair*> &previousVec);
 		
 		// FORD-JOHNSON DEQUE
-		void				freePairsDeque(std::deque<Pair*> &vec);
-		std::deque<Pair*>	makePairsDeque(const std::deque<Pair*> &vec);
-		std::deque<Pair*>	makePairsDeque(const std::deque<int> &vec);
+		void				freePairsDeque(std::deque<Pair*> &deque);
+		std::deque<Pair*>	makePairsDeque(const std::deque<Pair*> &deque);
+		std::deque<Pair*>	makePairsDeque(const std::deque<int> &deque);
 		std::deque<Pair*>	unpairToPairDeque(std::deque<Pair*> pairs);
 		std::deque<int>		unpairToIntDeque(std::deque<Pair*> pairs);
-		size_t				findIndexDeque(std::deque<Pair*> vec, int insert, int min, int max);
-		size_t				findIndexDeque(std::deque<int> vec, int insert, int min, int max);
-		std::deque<Pair*>	insertSortDeque(std::deque<Pair*> &vec);
-		std::deque<int>		insertSortDeque(std::deque<int> &vec);
-		std::deque<Pair*>	recursivityPairingSortDeque(const std::deque<Pair*> &previousVec);
+		size_t				findIndexDeque(std::deque<Pair*> deque, int insert, int min, int max);
+		size_t				findIndexDeque(std::deque<int> deque, int insert, int min, int max);
+		std::deque<Pair*>	insertSortDeque(std::deque<Pair*> &deque);
+		std::deque<int>		insertSortDeque(std::deque<int> &deque);
+		std::deque<Pair*>	recursivityPairingSortDeque(const std::deque<Pair*> &previousDeque);
 		
-		public:
+	public:
 		// CONSTRUCTOR AND DESTRUCTOR
 		PmergeMe(int ac, char **av);
 		~PmergeMe();
