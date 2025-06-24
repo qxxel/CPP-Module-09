@@ -6,7 +6,7 @@
 /*   By: agerbaud <agerbaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:07:17 by agerbaud          #+#    #+#             */
-/*   Updated: 2025/06/17 17:01:15 by agerbaud         ###   ########.fr       */
+/*   Updated: 2025/06/24 12:53:24 by agerbaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class Pair
 		Pair(const Pair &src);
 		Pair	&operator=(const Pair &src);
 		
-		public:
+	public:
 		// CONSTRUCTORS AND DESTRUCTOR
 		Pair(int first, int second);
 		Pair(Pair *first, Pair *second);
